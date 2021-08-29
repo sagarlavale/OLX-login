@@ -5,21 +5,10 @@ server:
 spring:
   application:
     name: login-service
-  datasource:
-    url: jdbc:mysql://localhost:3306/auth
-    username: root
-    password: root
-  jpa:
-    hibernate:
-     ddl-auto: update
-    properties:
-      hibernate:
-        dialect : org.hibernate.dialect.MySQL5InnoDBDialect
-        namingStrategy: org.hibernate.cfg.PhysicalNamingStrategy
-        jdbc:
-          lob:
-            non_contextual_creation: true
-    show-sql: true
+  config:
+    import: configserver:http://localhost:8888
+  zipkin:
+    base-url: http://localhost:9411
 eureka:
   instance:
     instance-id: ${spring.application.name}:${random.uuid}
@@ -29,5 +18,10 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: http://${eureka.instance.hostname}:8761/eureka
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
 olx.app.jwtSecret: olxSecretKey
 olx.app.jwtExpirationMs: 86400000
